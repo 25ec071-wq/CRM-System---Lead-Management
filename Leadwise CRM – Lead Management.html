@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leadwise CRM – Lead Management</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap">
+<style>
+:root{--bg:#f2f4f9;--sf:#fff;--ink:#1b2433;--mute:#65708a;--line:#dfe4ee;--ac:#2f5bea;--acink:#fff;--bad:#c93a3a;--good:#1b8a5a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151f;--sf:#192130;--ink:#e8ecf5;--mute:#93a0ba;--line:#2a3448;--ac:#7b9bff;--acink:#10151f;--bad:#ff7b7b;--good:#4fd39b;color-scheme:dark}}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 'Plus Jakarta Sans',system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+header{background:var(--sf);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:10}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 0}
+.brand{font-weight:800;font-size:1.25rem;margin-right:auto}
+.brand i{font-style:normal;color:var(--ac)}
+.btn{background:var(--ac);color:var(--acink);border:0;border-radius:9px;padding:9px 16px;font-weight:700}
+.btn.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.del{background:transparent;color:var(--bad);border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.stat{background:var(--sf);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat small{color:var(--mute)}
+.stat b{display:block;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.bar input,.bar select{background:var(--sf);border:1px solid var(--line);border-radius:9px;padding:8px 12px}
+.bar input{flex:1;min-width:180px;max-width:320px}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-left:auto}
+.seg button{background:var(--sf);border:0;padding:8px 14px}
+.seg button[aria-pressed="true"]{background:var(--ac);color:var(--acink);font-weight:700}
+.board{display:grid;grid-template-columns:repeat(6,minmax(210px,1fr));gap:12px;overflow-x:auto;padding-bottom:12px}
+.col{background:color-mix(in srgb,var(--line) 45%,transparent);border-radius:12px;padding:10px;min-height:200px}
+.col.over{outline:2px dashed var(--ac)}
+.col h3{margin:2px 4px 10px;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.col h3 span{color:var(--mute);font-weight:500;font-size:.82rem}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.card{background:var(--sf);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:grab}
+.card b{display:block}
+.card small{color:var(--mute);display:block}
+.card .v{font-weight:700;margin-top:4px}
+.card .r{display:flex;gap:6px;margin-top:8px;align-items:center}
+.card select{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 4px;font-size:.82rem}
+.card button.ed{background:none;border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:.82rem}
+.late{color:var(--bad);font-weight:700;font-size:.8rem}
+.tbl{overflow-x:auto;background:var(--sf);border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:500;font-size:.85rem}
+tr:last-child td{border-bottom:0}
+td button{background:none;border:0;color:var(--ac);font-weight:700;padding:0}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:700;background:var(--bg);border:1px solid var(--line)}
+.empty{padding:28px;color:var(--mute);text-align:center}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--sf);color:var(--ink);padding:0;width:min(560px,94vw);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+form{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+form h2{grid-column:1/-1;margin:0;font-size:1.3rem}
+label{display:flex;flex-direction:column;gap:4px;font-weight:500;font-size:.88rem}
+label.w{grid-column:1/-1}
+label input,label select,label textarea{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.acts{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}
+.acts .del{margin-right:auto}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:9px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+@media (max-width:760px){.stats{grid-template-columns:1fr 1fr}form{grid-template-columns:1fr}.seg{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap top">
+<div class="brand">Lead<i>wise</i> CRM</div>
+<button class="btn" id="new">Add lead</button>
+</div></header>
+
+<main class="wrap">
+<div class="stats" id="stats" aria-live="polite"></div>
+<div class="bar">
+<label style="position:absolute;left:-9999px" for="q">Search leads</label>
+<input type="search" id="q" placeholder="Search name, company or email">
+<label style="position:absolute;left:-9999px" for="fs">Filter by source</label>
+<select id="fs"></select>
+<label style="position:absolute;left:-9999px" for="fo">Filter by owner</label>
+<select id="fo"></select>
+<div class="seg" role="group" aria-label="View">
+<button id="vb" aria-pressed="true">Board</button><button id="vl" aria-pressed="false">List</button>
+</div>
+</div>
+<div id="view"></div>
+</main>
+
+<dialog id="dlg"><form id="f" method="dialog">
+<h2 id="ft">Add lead</h2>
+<label>Contact name<input id="n" required></label>
+<label>Company<input id="c"></label>
+<label>Email<input id="e" type="email"></label>
+<label>Phone<input id="p" type="tel"></label>
+<label>Deal value (₹)<input id="v" type="number" min="0" step="1000" value="0"></label>
+<label>Next follow-up<input id="d" type="date"></label>
+<label>Stage<select id="s"></select></label>
+<label>Source<select id="so"></select></label>
+<label>Owner<select id="ow"></select></label>
+<label class="w">Notes<textarea id="no" rows="3"></textarea></label>
+<div class="acts"><button type="button" class="btn del" id="rm" hidden>Delete lead</button><button type="button" class="btn sec" id="cx">Cancel</button><button type="submit" class="btn">Save lead</button></div>
+</form></dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const ST=[["New","#8a94a8"],["Contacted","#3b82f6"],["Qualified","#8b5cf6"],["Proposal","#f59e0b"],["Won","#1b8a5a"],["Lost","#c93a3a"]];
+const SRC=["Website","Referral","Cold call","Social media","Event","Email campaign"];
+const OWN=["Asha","Ravi","Meena","Karthik"];
+const KEY="leadwise-leads-v1";
+const iso=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const today=iso(0);
+const seed=()=>[
+["Priya Nair","Sunrise Textiles","priya@sunrise.example","+91 98400 11122",450000,"Qualified","Referral","Asha",2,"Wants bulk pricing for Q1."],
+["Arjun Mehta","Kite Logistics","arjun@kite.example","+91 98410 22233",820000,"Proposal","Website","Ravi",-2,"Proposal sent. Waiting on finance."],
+["Divya Raman","BrightPath School","divya@brightpath.example","+91 98420 33344",150000,"New","Event","Meena",1,"Met at the education expo."],
+["Sanjay Kumar","Orbit Foods","sanjay@orbit.example","+91 98430 44455",300000,"Contacted","Cold call","Karthik",3,"Asked for a demo next week."],
+["Lakshmi Iyer","Greenfield Clinic","lakshmi@greenfield.example","+91 98440 55566",275000,"Won","Referral","Asha",0,"Contract signed."],
+["Rohit Shah","Metro Print","rohit@metro.example","+91 98450 66677",90000,"Lost","Email campaign","Ravi",0,"Went with a cheaper vendor."],
+["Nisha Pillai","Aqua Retail","nisha@aqua.example","+91 98460 77788",520000,"Contacted","Social media","Meena",-1,"Left a voicemail."]
+].map((a,i)=>({id:"s"+i,name:a[0],company:a[1],email:a[2],phone:a[3],value:a[4],stage:a[5],source:a[6],owner:a[7],date:iso(a[8]),notes:a[9]}));
+let L=[];
+try{const r=localStorage.getItem(KEY);L=r?JSON.parse(r):seed()}catch(e){L=seed()}
+let view="board",q="",fs="All",fo="All",editing=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"₹"+Number(n||0).toLocaleString("en-IN");
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(L))}catch(e){}};
+const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800)};
+const opts=(a,sel)=>a.map(x=>`<option${x===sel?" selected":""}>${x}</option>`).join("");
+const late=l=>l.date&&l.date<today&&!["Won","Lost"].includes(l.stage);
+function filtered(){
+ return L.filter(l=>(fs==="All"||l.source===fs)&&(fo==="All"||l.owner===fo)&&(l.name+l.company+l.email).toLowerCase().includes(q));
+}
+function stats(){
+ const open=L.filter(l=>!["Won","Lost"].includes(l.stage)),won=L.filter(l=>l.stage==="Won"),lost=L.filter(l=>l.stage==="Lost");
+ const sum=a=>a.reduce((s,l)=>s+Number(l.value),0),rate=won.length+lost.length?Math.round(won.length/(won.length+lost.length)*100):0;
+ const od=open.filter(late).length;
+ $("stats").innerHTML=[["Total leads",L.length],["Open pipeline",money(sum(open))],["Won revenue",money(sum(won))],["Win rate",rate+"%"+(od?" · "+od+" overdue":"")]]
+ .map(s=>`<div class="stat"><small>${s[0]}</small><b>${s[1]}</b></div>`).join("");
+}
+function card(l){
+ return `<div class="card" draggable="true" data-id="${l.id}"><b>${esc(l.name)}</b><small>${esc(l.company)}</small><div class="v">${money(l.value)}</div><small>${esc(l.source)} · ${esc(l.owner)}</small>${late(l)?'<span class="late">Follow-up overdue</span>':(l.date?`<small>Follow up ${l.date}</small>`:"")}<div class="r"><select data-mv="${l.id}" aria-label="Stage for ${esc(l.name)}">${opts(ST.map(s=>s[0]),l.stage)}</select><button class="ed" data-ed="${l.id}">Edit</button></div></div>`;
+}
+function render(){
+ stats();
+ const f=filtered();
+ if(view==="board"){
+  $("view").innerHTML='<div class="board">'+ST.map(([s,c])=>{const a=f.filter(l=>l.stage===s);return `<div class="col" data-s="${s}"><h3><span style="color:var(--ink);font-weight:700"><i class="dot" style="background:${c}"></i>${s}</span><span>${a.length} · ${money(a.reduce((t,l)=>t+Number(l.value),0))}</span></h3>${a.map(card).join("")||'<p class="empty" style="padding:12px">No leads</p>'}</div>`}).join("")+"</div>";
+ }else{
+  $("view").innerHTML=f.length?`<div class="tbl"><table><thead><tr><th>Lead</th><th>Contact</th><th>Stage</th><th>Value</th><th>Owner</th><th>Follow-up</th><th></th></tr></thead><tbody>${f.map(l=>`<tr><td><b>${esc(l.name)}</b><br><small style="color:var(--mute)">${esc(l.company)} · ${esc(l.source)}</small></td><td>${esc(l.email)}<br><small style="color:var(--mute)">${esc(l.phone)}</small></td><td><span class="pill"><i class="dot" style="background:${ST.find(s=>s[0]===l.stage)[1]}"></i>${l.stage}</span></td><td>${money(l.value)}</td><td>${esc(l.owner)}</td><td>${late(l)?'<span class="late">'+l.date+'</span>':l.date||"–"}</td><td><button data-ed="${l.id}">Edit</button></td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">No leads match your filters. Clear the search or add a new lead.</div>';
+ }
+}
+function openForm(id){
+ editing=id;const l=L.find(x=>x.id===id)||{stage:"New",source:SRC[0],owner:OWN[0],value:0,date:iso(3)};
+ $("ft").textContent=id?"Edit lead":"Add lead";$("rm").hidden=!id;
+ $("n").value=l.name||"";$("c").value=l.company||"";$("e").value=l.email||"";$("p").value=l.phone||"";$("v").value=l.value;$("d").value=l.date||"";$("no").value=l.notes||"";
+ $("s").innerHTML=opts(ST.map(s=>s[0]),l.stage);$("so").innerHTML=opts(SRC,l.source);$("ow").innerHTML=opts(OWN,l.owner);
+ $("dlg").showModal();
+}
+$("f").onsubmit=e=>{
+ e.preventDefault();
+ const d={name:$("n").value.trim(),company:$("c").value.trim(),email:$("e").value.trim(),phone:$("p").value.trim(),value:Number($("v").value)||0,date:$("d").value,stage:$("s").value,source:$("so").value,owner:$("ow").value,notes:$("no").value.trim()};
+ if(editing){Object.assign(L.find(x=>x.id===editing),d);toast("Lead updated")}
+ else{L.unshift({id:"l"+Date.now(),...d});toast("Lead added")}
+ save();$("dlg").close();render();
+};
+$("rm").onclick=()=>{if(confirm("Delete this lead? This cannot be undone.")){L=L.filter(x=>x.id!==editing);save();$("dlg").close();render();toast("Lead deleted")}};
+$("cx").onclick=()=>$("dlg").close();
+$("new").onclick=()=>openForm(null);
+document.addEventListener("click",e=>{const b=e.target.closest("[data-ed]");if(b)openForm(b.dataset.ed)});
+document.addEventListener("change",e=>{const m=e.target.dataset&&e.target.dataset.mv;if(m){L.find(x=>x.id===m).stage=e.target.value;save();render();toast("Moved to "+e.target.value)}});
+let drag=null;
+document.addEventListener("dragstart",e=>{const c=e.target.closest&&e.target.closest(".card");if(c){drag=c.dataset.id;e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",drag)}});
+document.addEventListener("dragover",e=>{const c=e.target.closest&&e.target.closest(".col");if(c&&drag){e.preventDefault();document.querySelectorAll(".col.over").forEach(x=>x!==c&&x.classList.remove("over"));c.classList.add("over")}});
+document.addEventListener("drop",e=>{const c=e.target.closest&&e.target.closest(".col");if(c&&drag){e.preventDefault();L.find(x=>x.id===drag).stage=c.dataset.s;drag=null;save();render();toast("Moved to "+c.dataset.s)}});
+document.addEventListener("dragend",()=>{drag=null;document.querySelectorAll(".col.over").forEach(x=>x.classList.remove("over"))});
+$("q").oninput=e=>{q=e.target.value.trim().toLowerCase();render()};
+$("fs").onchange=e=>{fs=e.target.value;render()};
+$("fo").onchange=e=>{fo=e.target.value;render()};
+$("vb").onclick=()=>{view="board";$("vb").setAttribute("aria-pressed",true);$("vl").setAttribute("aria-pressed",false);render()};
+$("vl").onclick=()=>{view="list";$("vl").setAttribute("aria-pressed",true);$("vb").setAttribute("aria-pressed",false);render()};
+$("fs").innerHTML='<option value="All">All sources</option>'+SRC.map(s=>`<option>${s}</option>`).join("");
+$("fo").innerHTML='<option value="All">All owners</option>'+OWN.map(s=>`<option>${s}</option>`).join("");
+render();
+</script>
+</body>
+</html>
